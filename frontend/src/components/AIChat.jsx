@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Send, Sparkles, User } from 'lucide-react';
+import axios from 'axios';
 
 const AIChat = () => {
   const [messages, setMessages] = useState([
