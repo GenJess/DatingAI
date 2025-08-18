@@ -91,7 +91,7 @@ const CalendarView = () => {
           <CardDescription>
             Heatmap view of your dating activity over time
           </CardDescription>
-        </CardHead>
+        </CardHeader>
       </Card>
 
       {/* Calendar */}
