@@ -2,22 +2,21 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { Badge } from './ui/badge';
-import { Send, Bot, User, Sparkles, TrendingUp, Clock, MessageCircle } from 'lucide-react';
-import { mockAnalyticsData } from '../mock';
+import { Send, Sparkles, User } from 'lucide-react';
 
 const AIChat = () => {
   const [messages, setMessages] = useState([
     {
       id: 1,
       type: 'ai',
-      content: "Hi! I'm your dating analytics AI assistant. I've analyzed your Hinge data and I'm ready to help! I can provide insights on your messaging patterns, optimal timing for likes, sentiment analysis, and much more. What would you like to know?",
+      content: "Hey there! 🌟 I'm your personal dating coach powered by Gemini. I've analyzed your Hinge data and I'm here to help you level up your dating game! Ask me about timing strategies, message optimization, or anything else - I've got insights ready to share!",
       timestamp: new Date()
     }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
+  const [selectedQuickQuestion, setSelectedQuickQuestion] = useState(0);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -27,32 +26,28 @@ const AIChat = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Mock AI responses based on user data
+  // Enhanced AI responses with more personality
   const generateAIResponse = (userMessage) => {
     const message = userMessage.toLowerCase();
     
     if (message.includes('timing') || message.includes('when') || message.includes('best time')) {
-      return "Based on your data, your peak activity times are:\n\n📈 **Best days for likes**: Tuesday-Thursday (higher match rates)\n⏰ **Optimal timing**: 6-9 PM (you get 40% more responses)\n📊 Your matches tend to be most active on Sunday evenings, making it perfect for engaging conversations!\n\nYour data shows 25% higher response rates when you send messages between 6-9 PM compared to morning hours.";
+      return "✨ **Your Golden Hours** ✨\n\nI've analyzed your patterns and here's the magic formula:\n\n📅 **Best days for likes**: Tuesday-Thursday\n• 32% higher match rates on these days\n• People are more active midweek\n\n⏰ **Prime time**: 6-9 PM\n• You get 40% more responses during these hours\n• Sunday evenings are absolute gold for you!\n\n🎯 **Pro insight**: Your matches tend to be night owls - they're most responsive after 7 PM. Use this to your advantage!\n\n💡 **Bonus tip**: Avoid Monday mornings and Friday nights - engagement drops by 60% during these times.";
     }
     
     if (message.includes('message') || message.includes('conversation') || message.includes('chat')) {
-      return "Here's what I found about your messaging patterns:\n\n💬 **Most effective openers**:\n• 'Good morning 🌞' - 78% response rate\n• Questions about weekends - 65% response rate\n\n📝 **Message insights**:\n• Your average message length: 12 words\n• You use emojis in 40% of messages (great for engagement!)\n• Your conversations last average 8 messages\n\n🎯 **Tip**: Your data shows longer conversations (10+ messages) happen when you ask open-ended questions about hobbies or experiences.";
+      return "💬 **Your Messaging Superpower** 💬\n\nYour conversation style is working! Here's what I discovered:\n\n🏆 **Your best openers**:\n• 'Good morning 🌞' - crushing it with 78% response rate!\n• Weekend questions - 65% success rate\n• Emoji usage is *chef's kiss* - keep it up!\n\n📊 **Conversation flow**:\n• Average message length: 12 words (perfect!)\n• You use emojis in 40% of messages (ideal balance)\n• Your conversations average 8 messages\n\n🚀 **Level up strategy**:\n• Your 10+ message conversations happen when you ask about hobbies\n• People love your positive energy - it shows!\n• Try asking follow-up questions - it extends conversations by 50%";
     }
     
     if (message.includes('sentiment') || message.includes('mood') || message.includes('feeling')) {
-      return "📊 **Sentiment Analysis of Your Conversations**:\n\n😊 **Positive sentiment**: 72% of your messages\n😐 **Neutral**: 23%\n😔 **Negative**: 5%\n\n✨ **Key findings**:\n• Your most positive conversations happen on weekends\n• Messages with 🌞, ☕, and 😅 emojis get better responses\n• You tend to be more enthusiastic in evening conversations\n\n💡 **Recommendation**: Keep up the positive energy! Your upbeat messaging style correlates with longer conversations.";
-    }
-    
-    if (message.includes('match') || message.includes('success') || message.includes('rate')) {
-      return "🎯 **Your Match Success Analysis**:\n\n📈 **Match conversion**: 15 matches from your activity\n💬 **Message rate**: 89% (you message most matches!)\n⏱️ **Response time**: 2.5 hours average (faster than 65% of users)\n\n🏆 **Success patterns**:\n• Matches made on Tuesday-Thursday have 30% higher conversation rates\n• Your longest conversations (3+ weeks) started with hobby-related questions\n• Morning matches tend to lead to more substantial conversations\n\n🚀 **Growth opportunity**: Your data suggests increasing activity on Tuesday mornings could boost match quality.";
+      return "😊 **Your Vibe Check** 😊\n\nYour emotional intelligence is showing! Here's your sentiment breakdown:\n\n📈 **Positivity score**: 72% (amazing!)\n😊 **Positive**: 72% of your messages\n😐 **Neutral**: 23%\n😔 **Negative**: Only 5% (excellent emotional regulation!)\n\n✨ **Mood insights**:\n• Weekend you = most positive (87% positive sentiment)\n• Your favorite emojis (🌞, ☕, 😅) are conversation gold\n• Evening conversations show your best personality\n\n💎 **Secret sauce**: Your authenticity shines through. Keep being genuine - it's your superpower!";
     }
     
     if (message.includes('profile') || message.includes('prompt') || message.includes('photo')) {
-      return "📸 **Profile Performance Insights**:\n\nBased on your match patterns and conversation starters:\n\n🎭 **Most engaging prompts** (based on comments received):\n• Your travel photos get 40% more likes with comments\n• Hobby-related prompts generate better conversation starters\n\n💡 **Optimization suggestions**:\n• Add more photos from your hiking mentions (comes up in 3 conversations)\n• Consider prompts about weekend activities (your most successful conversation topic)\n\n📊 **Engagement data**: Profiles that comment on your prompts lead to 60% longer conversations.";
+      return "📸 **Profile Power Analysis** 📸\n\nYour profile is doing the heavy lifting! Here's the breakdown:\n\n🎭 **Engagement magnet prompts**:\n• Travel photos: +40% likes with comments\n• Hobby content: generates the best conversation starters\n• Your humor game is strong - people are commenting more!\n\n📊 **Performance metrics**:\n• Photo engagement: 80% (top tier!)\n• Prompt interaction: 60% (solid)\n• Overall profile appeal: 85% (you're killing it!)\n\n🚀 **Optimization tips**:\n• Add more hiking content (comes up in 3+ conversations)\n• Your weekend activity prompts are conversation goldmines\n• Consider adding a cooking photo - it's trending in your matches!";
     }
     
-    // Default response
-    return "That's an interesting question! Based on your Hinge data, I can help you with:\n\n🕐 **Timing optimization** - best times to like and message\n💬 **Message analysis** - what works best for you\n😊 **Sentiment insights** - mood patterns in your conversations\n🎯 **Match success rates** - what leads to better connections\n📸 **Profile optimization** - based on your engagement patterns\n\nWhat specific aspect would you like me to analyze for you?";
+    // Default response with more personality
+    return "Hey! 🎯 I'm here to help you dominate the dating game! I can dive deep into:\n\n🕐 **Timing mastery** - when to like, message, and engage\n💬 **Message magic** - what's working and what could be better\n😊 **Vibe analysis** - your emotional patterns and impact\n🎯 **Success metrics** - what's driving your best connections\n📸 **Profile optimization** - making your profile irresistible\n\nWhat would you like to explore first? I've got tons of insights waiting to be unleashed! ✨";
   };
 
   const handleSendMessage = async () => {
@@ -91,142 +86,131 @@ const AIChat = () => {
   };
 
   const quickQuestions = [
-    "When is the best time to send likes?",
-    "Analyze my messaging patterns",
-    "What's my conversation success rate?",
-    "Give me profile optimization tips"
+    "What's my optimal like timing?",
+    "Analyze my conversation style",
+    "How's my profile performing?",
+    "Give me success rate insights",
+    "What are my best openers?",
+    "Show me engagement patterns",
+    "How can I improve matches?",
+    "What's my dating personality?"
   ];
 
+  const handleQuickQuestion = (question) => {
+    setInput(question);
+  };
+
   return (
-    <div className="flex flex-col h-full max-w-4xl mx-auto p-4 pb-20 md:pb-4">
-      {/* Header */}
-      <Card className="mb-4">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-2">
-            <Bot className="w-6 h-6 text-purple-600" />
-            AI Dating Coach
-          </CardTitle>
-          <CardDescription>
-            Get personalized insights from your Hinge activity data
-          </CardDescription>
-        </CardHeader>
-      </Card>
+    <div className="sunday-vibes min-h-screen">
+      <div className="flex flex-col h-screen max-w-4xl mx-auto p-4">
+        
+        {/* Header */}
+        <Card className="brunch-card mb-4 border-0">
+          <CardHeader className="pb-4">
+            <CardTitle className="flex items-center gap-2">
+              <div className="p-2 rounded-full brunch-gradient">
+                <Sparkles className="w-5 h-5 text-white" />
+              </div>
+              AI Dating Coach
+            </CardTitle>
+            <CardDescription>
+              Powered by Gemini • Personalized insights from your data
+            </CardDescription>
+          </CardHeader>
+        </Card>
 
-      {/* Quick Stats */}
-      <Card className="mb-4">
-        <CardContent className="p-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center">
-              <TrendingUp className="w-5 h-5 text-green-600 mx-auto mb-1" />
-              <p className="text-lg font-bold">{mockAnalyticsData.overview.totalMatches}</p>
-              <p className="text-xs text-gray-600">Total Matches</p>
-            </div>
-            <div className="text-center">
-              <MessageCircle className="w-5 h-5 text-blue-600 mx-auto mb-1" />
-              <p className="text-lg font-bold">{mockAnalyticsData.overview.totalMessages}</p>
-              <p className="text-xs text-gray-600">Messages</p>
-            </div>
-            <div className="text-center">
-              <Clock className="w-5 h-5 text-purple-600 mx-auto mb-1" />
-              <p className="text-lg font-bold">{mockAnalyticsData.overview.averageResponseTime}</p>
-              <p className="text-xs text-gray-600">Avg Response</p>
-            </div>
-            <div className="text-center">
-              <Sparkles className="w-5 h-5 text-orange-600 mx-auto mb-1" />
-              <p className="text-lg font-bold">72%</p>
-              <p className="text-xs text-gray-600">Positive Sentiment</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+        {/* Chat Messages */}
+        <Card className="brunch-card flex-1 flex flex-col mb-4 border-0">
+          <CardContent className="flex-1 p-4 overflow-y-auto">
+            <div className="space-y-4">
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  {message.type === 'ai' && (
+                    <div className="w-10 h-10 rounded-full brunch-gradient flex items-center justify-center flex-shrink-0">
+                      <Sparkles className="w-5 h-5 text-white" />
+                    </div>
+                  )}
+                  
+                  <div className={`max-w-xs md:max-w-md lg:max-w-lg p-4 rounded-2xl ${
+                    message.type === 'user' 
+                      ? 'brunch-gradient text-white rounded-br-md shadow-lg' 
+                      : 'bg-white text-gray-900 rounded-bl-md shadow-lg border border-gray-100'
+                  }`}>
+                    <div className="whitespace-pre-wrap text-sm leading-relaxed">{message.content}</div>
+                    <div className={`text-xs mt-2 ${
+                      message.type === 'user' ? 'text-purple-100' : 'text-gray-500'
+                    }`}>
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                  </div>
 
-      {/* Chat Messages */}
-      <Card className="flex-1 flex flex-col mb-4 min-h-96">
-        <CardContent className="flex-1 p-4 space-y-4 overflow-y-auto max-h-96">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
-            >
-              {message.type === 'ai' && (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-4 h-4 text-white" />
+                  {message.type === 'user' && (
+                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                      <User className="w-5 h-5 text-gray-600" />
+                    </div>
+                  )}
                 </div>
-              )}
+              ))}
               
-              <div className={`max-w-xs md:max-w-md lg:max-w-lg p-3 rounded-lg ${
-                message.type === 'user' 
-                  ? 'bg-purple-600 text-white rounded-br-sm' 
-                  : 'bg-gray-100 text-gray-900 rounded-bl-sm'
-              }`}>
-                <div className="whitespace-pre-wrap text-sm">{message.content}</div>
-                <div className={`text-xs mt-1 ${
-                  message.type === 'user' ? 'text-purple-100' : 'text-gray-500'
-                }`}>
-                  {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </div>
-              </div>
-
-              {message.type === 'user' && (
-                <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
-                  <User className="w-4 h-4 text-gray-600" />
+              {isLoading && (
+                <div className="flex gap-3 justify-start">
+                  <div className="w-10 h-10 rounded-full brunch-gradient flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="bg-white p-4 rounded-2xl rounded-bl-md shadow-lg border border-gray-100">
+                    <div className="flex space-x-2">
+                      <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                      <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                    </div>
+                  </div>
                 </div>
               )}
+              <div ref={messagesEndRef} />
             </div>
-          ))}
-          
-          {isLoading && (
-            <div className="flex gap-3 justify-start">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center flex-shrink-0">
-                <Bot className="w-4 h-4 text-white" />
-              </div>
-              <div className="bg-gray-100 p-3 rounded-lg rounded-bl-sm">
-                <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                </div>
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      {/* Quick Questions */}
-      <div className="mb-4">
-        <p className="text-sm text-gray-600 mb-2">Quick questions:</p>
-        <div className="flex flex-wrap gap-2">
-          {quickQuestions.map((question, index) => (
-            <Badge 
-              key={index}
-              variant="outline" 
-              className="cursor-pointer hover:bg-purple-50 hover:border-purple-300 transition-colors"
-              onClick={() => setInput(question)}
-            >
-              {question}
-            </Badge>
-          ))}
+        {/* Quick Questions - Horizontal Scroll */}
+        <div className="mb-4">
+          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+            {quickQuestions.map((question, index) => (
+              <button
+                key={index}
+                onClick={() => handleQuickQuestion(question)}
+                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  selectedQuestionIndex === index
+                    ? 'brunch-gradient text-white shadow-lg'
+                    : 'bg-white text-gray-700 border border-gray-200 hover:border-purple-200 hover:shadow-md'
+                }`}
+              >
+                {question}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Input */}
-      <div className="flex gap-2">
-        <Input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Ask me about your dating patterns, optimal timing, message analysis..."
-          className="flex-1"
-          disabled={isLoading}
-        />
-        <Button 
-          onClick={handleSendMessage}
-          disabled={!input.trim() || isLoading}
-          className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-        >
-          <Send className="w-4 h-4" />
-        </Button>
+        {/* Input */}
+        <div className="flex gap-3">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Ask me anything about your dating patterns..."
+            className="flex-1 rounded-full border-gray-200 focus:border-purple-300 focus:ring-purple-200"
+            disabled={isLoading}
+          />
+          <Button 
+            onClick={handleSendMessage}
+            disabled={!input.trim() || isLoading}
+            className="brunch-button text-white rounded-full px-6 shadow-lg"
+          >
+            <Send className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );
