@@ -118,10 +118,10 @@ const Dashboard = () => {
         {/* Main Content Tabs */}
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
           <TabsList className="grid w-full grid-cols-4 lg:grid-cols-4">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="activity">Activity</TabsTrigger>
-            <TabsTrigger value="conversations">Chats</TabsTrigger>
-            <TabsTrigger value="insights">Insights</TabsTrigger>
+            <TabsTrigger value="overview" data-testid="overview-tab">Overview</TabsTrigger>
+            <TabsTrigger value="activity" data-testid="activity-tab">Activity</TabsTrigger>
+            <TabsTrigger value="conversations" data-testid="conversations-tab">Chats</TabsTrigger>
+            <TabsTrigger value="insights" data-testid="insights-tab">Insights</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
