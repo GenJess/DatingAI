@@ -66,6 +66,48 @@ async def get_status_checks():
     status_checks = await db.status_checks.find().to_list(1000)
     return [StatusCheck(**status_check) for status_check in status_checks]
 
+@api_router.post("/chat", response_model=ChatResponse)
+async def chat_with_ai(chat_message: ChatMessage):
+    try:
+        # Enhanced system prompt with dating context
+        system_prompt = """You are an expert dating coach and analytics assistant. You have access to the user's Hinge dating data and can provide personalized insights on:
+        
+        - Optimal timing for likes and messages
+        - Message analysis and conversation strategies  
+        - Profile optimization tips
+        - Sentiment analysis of conversations
+        - Success rate patterns and improvements
+        - Dating psychology and behavioral insights
+        
+        Be friendly, encouraging, and data-driven in your responses. Use emojis and formatting to make your advice engaging and actionable. Always provide specific, personalized recommendations based on typical dating data patterns."""
+        
+        # Combine system prompt with user message
+        full_prompt = f"{system_prompt}\n\nUser question: {chat_message.message}"
+        
+        # Generate response using Gemini
+        response = model.generate_content(full_prompt)
+        
+        # Create session ID if not provided
+        session_id = chat_message.session_id or str(uuid.uuid4())
+        
+        # Store chat in database (optional)
+        chat_record = {
+            "session_id": session_id,
+            "user_message": chat_message.message,
+            "ai_response": response.text,
+            "timestamp": datetime.utcnow()
+        }
+        await db.chat_history.insert_one(chat_record)
+        
+        return ChatResponse(
+            response=response.text,
+            session_id=session_id
+        )
+        
+    except Exception as e:
+        logger.error(f"Error in chat endpoint: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error generating AI response")
+
 # Include the router in the main app
 app.include_router(api_router)
 
