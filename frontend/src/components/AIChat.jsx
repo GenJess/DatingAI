@@ -31,30 +31,6 @@ const AIChat = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Enhanced AI responses with more personality
-  const generateAIResponse = (userMessage) => {
-    const message = userMessage.toLowerCase();
-    
-    if (message.includes('timing') || message.includes('when') || message.includes('best time')) {
-      return "✨ **Your Golden Hours** ✨\n\nI've analyzed your patterns and here's the magic formula:\n\n📅 **Best days for likes**: Tuesday-Thursday\n• 32% higher match rates on these days\n• People are more active midweek\n\n⏰ **Prime time**: 6-9 PM\n• You get 40% more responses during these hours\n• Sunday evenings are absolute gold for you!\n\n🎯 **Pro insight**: Your matches tend to be night owls - they're most responsive after 7 PM. Use this to your advantage!\n\n💡 **Bonus tip**: Avoid Monday mornings and Friday nights - engagement drops by 60% during these times.";
-    }
-    
-    if (message.includes('message') || message.includes('conversation') || message.includes('chat')) {
-      return "💬 **Your Messaging Superpower** 💬\n\nYour conversation style is working! Here's what I discovered:\n\n🏆 **Your best openers**:\n• 'Good morning 🌞' - crushing it with 78% response rate!\n• Weekend questions - 65% success rate\n• Emoji usage is *chef's kiss* - keep it up!\n\n📊 **Conversation flow**:\n• Average message length: 12 words (perfect!)\n• You use emojis in 40% of messages (ideal balance)\n• Your conversations average 8 messages\n\n🚀 **Level up strategy**:\n• Your 10+ message conversations happen when you ask about hobbies\n• People love your positive energy - it shows!\n• Try asking follow-up questions - it extends conversations by 50%";
-    }
-    
-    if (message.includes('sentiment') || message.includes('mood') || message.includes('feeling')) {
-      return "😊 **Your Vibe Check** 😊\n\nYour emotional intelligence is showing! Here's your sentiment breakdown:\n\n📈 **Positivity score**: 72% (amazing!)\n😊 **Positive**: 72% of your messages\n😐 **Neutral**: 23%\n😔 **Negative**: Only 5% (excellent emotional regulation!)\n\n✨ **Mood insights**:\n• Weekend you = most positive (87% positive sentiment)\n• Your favorite emojis (🌞, ☕, 😅) are conversation gold\n• Evening conversations show your best personality\n\n💎 **Secret sauce**: Your authenticity shines through. Keep being genuine - it's your superpower!";
-    }
-    
-    if (message.includes('profile') || message.includes('prompt') || message.includes('photo')) {
-      return "📸 **Profile Power Analysis** 📸\n\nYour profile is doing the heavy lifting! Here's the breakdown:\n\n🎭 **Engagement magnet prompts**:\n• Travel photos: +40% likes with comments\n• Hobby content: generates the best conversation starters\n• Your humor game is strong - people are commenting more!\n\n📊 **Performance metrics**:\n• Photo engagement: 80% (top tier!)\n• Prompt interaction: 60% (solid)\n• Overall profile appeal: 85% (you're killing it!)\n\n🚀 **Optimization tips**:\n• Add more hiking content (comes up in 3+ conversations)\n• Your weekend activity prompts are conversation goldmines\n• Consider adding a cooking photo - it's trending in your matches!";
-    }
-    
-    // Default response with more personality
-    return "Hey! 🎯 I'm here to help you dominate the dating game! I can dive deep into:\n\n🕐 **Timing mastery** - when to like, message, and engage\n💬 **Message magic** - what's working and what could be better\n😊 **Vibe analysis** - your emotional patterns and impact\n🎯 **Success metrics** - what's driving your best connections\n📸 **Profile optimization** - making your profile irresistible\n\nWhat would you like to explore first? I've got tons of insights waiting to be unleashed! ✨";
-  };
-
   const handleSendMessage = async () => {
     if (!input.trim()) return;
 
@@ -66,21 +42,42 @@ const AIChat = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = input;
     setInput('');
     setIsLoading(true);
 
-    // Simulate AI processing time
-    setTimeout(() => {
+    try {
+      const response = await axios.post(`${API}/chat`, {
+        message: currentInput,
+        session_id: sessionId
+      });
+
       const aiResponse = {
         id: messages.length + 2,
         type: 'ai',
-        content: generateAIResponse(input),
+        content: response.data.response,
         timestamp: new Date()
       };
-      
+
       setMessages(prev => [...prev, aiResponse]);
+      
+      // Store session ID for continuity
+      if (!sessionId) {
+        setSessionId(response.data.session_id);
+      }
+      
+    } catch (error) {
+      console.error('Error sending message:', error);
+      const errorResponse = {
+        id: messages.length + 2,
+        type: 'ai',
+        content: "Sorry, I'm having trouble connecting right now. Please try again in a moment! 😅",
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorResponse]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const handleKeyPress = (e) => {
