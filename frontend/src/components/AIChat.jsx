@@ -181,11 +181,7 @@ const AIChat = () => {
               <button
                 key={index}
                 onClick={() => handleQuickQuestion(question)}
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
-                  selectedQuestionIndex === index
-                    ? 'brunch-gradient text-white shadow-lg'
-                    : 'bg-white text-gray-700 border border-gray-200 hover:border-purple-200 hover:shadow-md'
-                }`}
+                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white text-gray-700 border border-gray-200 hover:border-purple-200 hover:shadow-md`}
               >
                 {question}
               </button>
